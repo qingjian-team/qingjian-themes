@@ -13,7 +13,7 @@ body:
     id: version
     attributes:
       label: 青简版本与系统
-      placeholder: 青简 0.1.5，Windows 11
+      placeholder: 青简 0.2.0，Windows 11
     validations:
       required: true
   - type: dropdown

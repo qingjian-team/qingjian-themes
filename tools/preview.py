@@ -5,7 +5,7 @@
     python3 tools/preview.py themes/my-theme --app "D:\\Qingjian\\qingjian-server.exe"
 
 图由青简自己的渲染器画，与输入时看到的一样；封面 cover.png 与额外截图要自己做。
-某一张没画出来只提示，不影响其余几张。需要 macOS 或 Windows 上装好青简（0.1.5 起）。
+某一张没画出来只提示，不影响其余几张。需要 macOS 或 Windows 上装好青简（0.2.0 起）。
 """
 
 import argparse
@@ -56,11 +56,11 @@ def main():
         )
         return 1
 
-    # 0.1.5 之前的青简不认这个参数，会照常起输入法服务、不退出：超时就当版本太旧
+    # 0.2.0 之前的青简不认这个参数，会照常起输入法服务、不退出：超时就当版本太旧
     try:
         result = subprocess.run([str(app), FLAG, str(theme)], timeout=30)
     except subprocess.TimeoutExpired:
-        print("\n青简没有响应，多半是版本太旧（0.1.5 起才能生成预览图），请先升级。", file=sys.stderr)
+        print("\n青简没有响应，多半是版本太旧（0.2.0 起才能生成预览图），请先升级。", file=sys.stderr)
         return 1
     except OSError as error:
         print(f"启动不了 {app}：{error}\n用安装包装好的青简，不要用自己编译、没签名的版本。", file=sys.stderr)

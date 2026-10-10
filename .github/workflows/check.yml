@@ -26,8 +26,8 @@ jobs:
         env:
           BODY: ${{ github.event.pull_request.body }}
         run: |
-          if ! grep -qE '^- \[[xX]\] 主题里的图片是我自己画的' <<<"$BODY"; then
-            echo "::error::请在 PR 描述里勾选「主题里的图片是我自己画的，或我有权使用并按主题的许可证发布」"
+          if ! grep -qE '^- \[[xX]\] 主题里的图片是原创' <<<"$BODY"; then
+            echo "::error::请在 PR 描述里勾选素材与授权那一项（见 README「许可」）"
             exit 1
           fi
 

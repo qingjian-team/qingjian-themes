@@ -1,0 +1,89 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check themes
+        run: python3 tools/check.py --index index.json
+
+      # 素材授权由投稿人在 PR 模板里勾选确认；没勾不合
+      - name: Check license confirmation
+        if: github.event_name == 'pull_request'
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if ! grep -qE '^- \[[xX]\] 主题里的图片是我自己画的' <<<"$BODY"; then
+            echo "::error::请在 PR 描述里勾选「主题里的图片是我自己画的，或我有权使用并按主题的许可证发布」"
+            exit 1
+          fi
+
+  # 用青简渲染器把改到的主题画成竖排 / 横排 PNG，作为构件上传，审核时与投稿截图对照。
+  # Linux 上没有主题写的系统字体（宋体、苹方等）时会回退到 Noto CJK，字形与真机不同，只看布局与颜色。
+  render:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Find changed themes
+        id: changed
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          dirs=$(git diff --name-only "$BASE" HEAD | sed -nE 's#^((themes|examples)/[^/]+)/.*#\1#p' | sort -u | while read -r d; do [ -d "$d" ] && echo "$d"; done)
+          echo "dirs=$(echo $dirs)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.changed.outputs.dirs != ''
+        with:
+          repository: qingjian-team/qingjian
+          path: qingjian
+          persist-credentials: false
+
+      - uses: dtolnay/rust-toolchain@7e38f4b43b4db5c8dd498af069a4f6196df1d067 # v1
+        if: steps.changed.outputs.dirs != ''
+        with:
+          toolchain: 1.96.0
+
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        if: steps.changed.outputs.dirs != ''
+        with:
+          workspaces: qingjian
+
+      - name: Render previews
+        if: steps.changed.outputs.dirs != ''
+        env:
+          DIRS: ${{ steps.changed.outputs.dirs }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji
+          for dir in $DIRS; do
+            id=$(basename "$dir")
+            cargo run --manifest-path qingjian/Cargo.toml --locked --release -p qingjian-render --example preview -- \
+              --theme "$PWD/$dir" --out "$PWD/render/$id"
+            find "render/$id" -type f ! -name 'nihao-*' -delete
+          done
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: steps.changed.outputs.dirs != ''
+        with:
+          name: rendered-previews
+          path: render/

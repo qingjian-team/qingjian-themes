@@ -1,0 +1,11 @@
+name: 想要的主题
+description: 想要某种风格的主题，或给现有主题提建议。
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: 想要什么样的主题
+      description: 风格、配色、参考图都可以
+    validations:
+      required: true

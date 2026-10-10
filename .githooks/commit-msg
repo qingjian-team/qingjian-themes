@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# 提交信息按 Conventional Commits：`<类型>(<范围>): <说明>`，范围写主题 id。跳过：git commit --no-verify。
+set -euo pipefail
+subject="$(sed -n '1p' "$1")"
+if [[ "$subject" =~ ^(Revert|fixup!|squash!|amend!) ]]; then
+  exit 0
+fi
+types='feat|fix|docs|ci|chore|refactor|style|revert'
+if [[ ! "$subject" =~ ^($types)(\([a-z0-9._/-]+\))?!?:\ [^[:space:]] ]]; then
+  cat >&2 <<MSG
+提交信息第一行要是「<类型>(<范围>): <说明>」，范围写主题 id，例如 feat(my-theme): 新增「我的主题」
+  类型：$types
+  现在是：$subject
+约定见 README「提交信息」。
+MSG
+  exit 1
+fi

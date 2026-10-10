@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 输入法本身的问题与建议
+    url: https://github.com/qingjian-team/qingjian/issues
+    about: 打字、候选、设置、安装等问题请到青简主仓库提。
+  - name: 主题怎么写
+    url: https://qingjian.app/docs/settings/themes
+    about: 主题文件的写法见使用说明的「主题」页。

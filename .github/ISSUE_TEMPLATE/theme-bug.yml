@@ -1,0 +1,32 @@
+name: 主题显示有问题
+description: 某个主题显示不对：文字看不清、图片错位、颜色不对等。
+labels: [bug]
+body:
+  - type: input
+    id: theme
+    attributes:
+      label: 主题
+      description: 主题名或 id
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 青简版本与系统
+      placeholder: 青简 0.1.5，Windows 11
+    validations:
+      required: true
+  - type: dropdown
+    id: layout
+    attributes:
+      label: 排布
+      options: [竖排, 横排, 两种都有]
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 哪里不对
+      description: 附候选窗口截图
+    validations:
+      required: true

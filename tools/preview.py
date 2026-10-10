@@ -62,6 +62,9 @@ def main():
     except subprocess.TimeoutExpired:
         print("\n青简没有响应，多半是版本太旧（0.1.5 起才能生成预览图），请先升级。", file=sys.stderr)
         return 1
+    except OSError as error:
+        print(f"启动不了 {app}：{error}\n用安装包装好的青简，不要用自己编译、没签名的版本。", file=sys.stderr)
+        return 1
     if result.returncode != 0:
         return result.returncode
 

@@ -18,6 +18,7 @@
 themes/<id>/            投稿的主题，一个主题一个文件夹，文件夹名等于主题 id
 examples/sakura/        青简内置「樱花」主题的源文件，写主题时照着改
 tools/check.py          校验脚本，CI 与本地提交钩子都跑它
+tools/preview.py        用本机的青简生成预览图
 ```
 
 ## 提交主题
@@ -55,7 +56,14 @@ themes/my-theme/
 - **大小**：整个主题文件夹不超过 5 MB。
 - **素材**：图片要是原创（含 AI 生成），或者你有权使用并按 `license` 发布；AI 生成的在主题 README 的「素材」一节写明。PR 模板里有一项要勾选确认。
 
-提交前在本地跑一遍：
+截图不用自己截：装好青简后跑
+
+```sh
+python3 tools/preview.py themes/my-theme
+```
+
+它用本机的青简把主题画成 `vertical.png`、`horizontal.png`（没锁定外观的再加 `vertical-dark.png`），与输入时看到的一样，画完顺手校验。
+封面 `cover.png` 与额外截图要自己做。只想校验的话：
 
 ```sh
 python3 tools/check.py themes/my-theme

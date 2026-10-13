@@ -16,7 +16,7 @@
 
 ```
 themes/<id>/            投稿的主题，一个主题一个文件夹，文件夹名等于主题 id
-examples/sakura/        青简内置「樱花」主题的源文件，写主题时照着改
+examples/<id>/          青简内置主题（樱花、大肥鱼、初音未来、波奇酱）的源文件，写主题时照着改
 tools/check.py          校验脚本，CI 与本地提交钩子都跑它
 tools/preview.py        用本机的青简生成预览图
 ```
@@ -44,7 +44,7 @@ themes/my-theme/
 规则：
 
 - **`theme.json`**：`"schema"` 写青简支持的格式版本（现在是 `1`）。`meta` 里这些必填：
-  - `id`：小写字母、数字、连字符，与文件夹名相同；不能用内置主题的 id（`qingjian` `system-blue` `wechat` `sakura`）和 `system` `light` `dark`
+  - `id`：小写字母、数字、连字符，与文件夹名相同；不能用内置主题的 id（`qingjian` `system-blue` `wechat` `sakura` `dafeiyu` `miku` `bocchi`）和 `system` `light` `dark`
   - `name`：显示名
   - `author`：作者
   - `license`：SPDX 许可证标识，如 `CC-BY-4.0`、`GPL-3.0-or-later`

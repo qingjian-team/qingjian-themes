@@ -24,7 +24,7 @@ SCHEMA = 1
 
 # 内置主题与外观词：用户主题不能用这些 id（青简会拒绝加载）。examples/ 里放的是内置主题的源文件，不受此限。
 RESERVED_IDS = {
-    "qingjian", "system-blue", "wechat", "sakura", "dafeiyu", "miku", "bocchi", "system", "light", "dark",
+    "qingjian", "system-blue", "wechat", "glass", "sakura", "dafeiyu", "miku", "bocchi", "system", "light", "dark",
 }
 
 ID_PATTERN = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")

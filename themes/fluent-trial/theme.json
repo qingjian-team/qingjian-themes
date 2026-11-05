@@ -1,0 +1,222 @@
+{
+  "extends": "qingjian",
+  "schema": 1,
+  "meta": {
+    "id": "fluent-trial",
+    "name": "轻简横排",
+    "appearance": "light",
+    "author": "arelilumat143-commits",
+    "license": "GPL-3.0-or-later",
+    "description": "浅色紧凑的横排候选，译词显示在中文下方。",
+    "version": "1.0.0",
+    "tags": [
+      "浅色",
+      "简约",
+      "横排"
+    ]
+  },
+  "variables": {
+    "surface": "#fafafa",
+    "accent": "#ededee",
+    "text": "#191919",
+    "gloss": "#707982",
+    "fresh": "#707982",
+    "faint": "#899198",
+    "hl_text": "#191919",
+    "hl_gloss": "#707982",
+    "hl_fresh": "#707982",
+    "hl_faint": "#899198"
+  },
+  "text": {
+    "styles": {
+      "candidate": {
+        "size": 14.5,
+        "line_height": 19
+      },
+      "annotation": {
+        "size": 12.5,
+        "line_height": 17
+      },
+      "index": {
+        "size": 14.5,
+        "line_height": 19
+      }
+    }
+  },
+  "components": {
+    "trial_pager": {
+      "type": "frame",
+      "when": "page",
+      "gap": 10,
+      "children": [
+        {
+          "type": "icon",
+          "icon": "chevron-left",
+          "size": 9,
+          "height": 20,
+          "action": "previous_page",
+          "color": {
+            "if": "page.previous",
+            "then": "@faint",
+            "else": "@dim"
+          }
+        },
+        {
+          "type": "icon",
+          "icon": "chevron-right",
+          "size": 9,
+          "height": 20,
+          "action": "next_page",
+          "color": {
+            "if": "page.next",
+            "then": "@faint",
+            "else": "@dim"
+          }
+        }
+      ]
+    },
+    "item": {
+      "type": "frame",
+      "direction": "column",
+      "padding": [
+        4,
+        9,
+        4,
+        9
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "highlight",
+          "when": "highlighted",
+          "position": "absolute",
+          "inset": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "fill": "@accent",
+          "radius": 5
+        },
+        {
+          "type": "frame",
+          "when": "highlighted",
+          "position": "absolute",
+          "inset": [
+            7,
+            "auto",
+            21,
+            3
+          ],
+          "width": 3,
+          "fill": "#5577b3",
+          "radius": 1.5
+        },
+        {
+          "type": "frame",
+          "children": [
+            {
+              "type": "text",
+              "bind": "index",
+              "font": "index",
+              "color": "@faint"
+            },
+            {
+              "type": "use",
+              "component": "word",
+              "margin": [
+                0,
+                0,
+                0,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "type": "annotation",
+          "bind": "annotation",
+          "when": "annotation",
+          "font": "annotation",
+          "tones": [
+            "gloss",
+            "fresh"
+          ],
+          "senses": 1,
+          "gloss": "@gloss",
+          "fresh": "@fresh",
+          "faint": "@faint",
+          "margin": [
+            2,
+            0,
+            0,
+            16
+          ]
+        }
+      ]
+    }
+  },
+  "windows": {
+    "horizontal": {
+      "type": "frame",
+      "direction": "column",
+      "padding": 6,
+      "fill": "@surface",
+      "radius": 9,
+      "border": {
+        "width": 1,
+        "color": "#e2e4e7"
+      },
+      "effects": [
+        {
+          "type": "drop-shadow",
+          "y": 4,
+          "blur": 10,
+          "color": "#00000030"
+        }
+      ],
+      "children": [
+        {
+          "type": "use",
+          "component": "top_line"
+        },
+        {
+          "type": "frame",
+          "when": "candidates",
+          "align_self": "stretch",
+          "gap": 4,
+          "children": [
+            {
+              "type": "repeat",
+              "bind": "candidates",
+              "component": "item"
+            },
+            {
+              "type": "frame",
+              "when": "page",
+              "margin": [
+                0,
+                0,
+                0,
+                "auto"
+              ],
+              "children": [
+                {
+                  "type": "use",
+                  "component": "trial_pager",
+                  "margin": [
+                    0,
+                    4,
+                    0,
+                    8
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
